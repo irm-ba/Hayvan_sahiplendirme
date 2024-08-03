@@ -80,7 +80,7 @@ class _AccountPageState extends State<AccountPage> {
   Widget colorTiles() {
     return Column(
       children: [
-        colorTile(Icons.person_outline, Colors.deepPurple, "Kişisel Bilgiler"),
+        colorTile(Icons.person_outline, Colors.deepPurple, "Kişisel Bilgiler."),
         colorTile(Icons.settings_outlined, Color.fromARGB(255, 232, 205, 236),
             "Ayarlar"),
         colorTile(Icons.favorite_border, Color.fromARGB(255, 144, 112, 143),

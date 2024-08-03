@@ -50,7 +50,7 @@ class PetDetailsInfoCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '${pet.age ?? 'Bilinmeyen'} yaşında',
+                '${pet.age ?? 'Bilinmiyor'} yaşında',
                 style: TextStyle(
                   color: Colors.red,
                   fontSize: 14,

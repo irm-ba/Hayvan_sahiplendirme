@@ -9,7 +9,7 @@ import 'package:pet_adoption/widgets/CustomBottomNavigationBar.dart';
 import '../widgets/pet_grid_list.dart'; // Ensure PetGridList is correctly imported
 
 class Home extends StatelessWidget {
-  const Home({Key? key}); // Add a key parameter if necessary
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +167,4 @@ class Home extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Home(),
-  ));
 }

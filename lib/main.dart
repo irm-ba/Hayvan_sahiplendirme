@@ -7,6 +7,7 @@ import 'package:pet_adoption/deneme_service.dart';
 import 'package:pet_adoption/example.dart';
 import 'package:pet_adoption/screens/IntroScreen.dart';
 import 'package:pet_adoption/screens/home.dart';
+import 'package:pet_adoption/sign_up.dart';
 import 'package:pet_adoption/widgets/healtbutton.dart';
 import 'firebase/auth.dart';
 import '';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: IntroScreen(),
+      home: SignupPage(),
     );
   }
 }

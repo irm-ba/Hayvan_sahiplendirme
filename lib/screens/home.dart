@@ -8,12 +8,20 @@ import 'package:pet_adoption/aboutpage.dart';
 import 'package:pet_adoption/widgets/CustomBottomNavigationBar.dart';
 import '../widgets/pet_grid_list.dart'; // Ensure PetGridList is correctly imported
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String selectedCategory = 'Kayıp İlanları';
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Padding(padding: EdgeInsets.only(top: 30),
+    child:Scaffold(
       bottomNavigationBar: CustomBottomNavigationBar(),
       drawer: Drawer(
         child: ListView(
@@ -101,24 +109,18 @@ class Home extends StatelessWidget {
       ),
       body: Column(
         children: [
-          /// Search Bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextField(
-              style: TextStyle(color: Colors.purple), // Text color
-              decoration: InputDecoration(
-                hintText: 'Aramak için petler',
-                hintStyle: TextStyle(
-                    color: Colors.purple.withOpacity(0.7)), // Hint text color
-                prefixIcon:
-                    Icon(Icons.search, color: Colors.purple), // Icon color
-                filled: true,
-                fillColor: Colors.pink.shade50, // Background color
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  borderSide: BorderSide.none, // No border
-                ),
-              ),
+          /// Categories
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+
+                _buildCategoryButton('Kedi İlanları'),
+                _buildCategoryButton('Kayıp İlanları'),
+                _buildCategoryButton('Tüm İlanlar'),
+                _buildCategoryButton('Köpek İlanları'),
+
+              ],
             ),
           ),
           const SizedBox(height: 24),
@@ -126,7 +128,7 @@ class Home extends StatelessWidget {
           /// Pet List
           Expanded(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('pet').snapshots(),
+              stream: _getCategoryStream(selectedCategory),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -140,18 +142,63 @@ class Home extends StatelessWidget {
 
                 // Firestore'dan gelen verileri PetData listesine dönüştürme
                 List<PetData> pets =
-                    snapshot.data!.docs.map((DocumentSnapshot doc) {
+                snapshot.data!.docs.map((DocumentSnapshot doc) {
                   return PetData.fromSnapshot(doc);
                 }).toList();
 
-                return PetGridList(
-                    pets:
-                        pets); // Ensure PetGridList is properly defined and imported
+                return PetGridList(pets: pets);
               },
             ),
           ),
         ],
       ),
+    )
     );
+
+
+  }
+
+  Widget _buildCategoryButton(String category) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedCategory = category;
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        decoration: BoxDecoration(
+          color: selectedCategory == category ? kBrownColor : Colors.grey[300],
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          category,
+          style: TextStyle(
+            color: selectedCategory == category ? Colors.white : Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Stream<QuerySnapshot> _getCategoryStream(String category) {
+    if (category == 'Kayıp İlanları') {
+      return FirebaseFirestore.instance.collection('lost_animals').snapshots();
+    } else if (category == 'Kedi İlanları') {
+      return FirebaseFirestore.instance
+          .collection('pet')
+          .where('animalType', isEqualTo: 'Kedi')
+          .snapshots();
+    } else if (category == 'Köpek İlanları') {
+      return FirebaseFirestore.instance
+          .collection('pet')
+          .where('animalType', isEqualTo: 'Köpek')
+          .snapshots();
+    } else {
+      return FirebaseFirestore.instance.collection('pet').snapshots();
+    }
+
   }
 }

@@ -33,7 +33,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         } else if (index == 2) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProductAdd()),
+            MaterialPageRoute(builder: (context) => MainScreen()),
           );
         } else if (index == 3) {
           Navigator.push(

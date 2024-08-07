@@ -100,7 +100,7 @@ class PetDetailsScreen extends StatelessWidget {
                       CustomInfographic(
                         color: const Color(0xffF78F8F),
                         title: 'Yaş',
-                        value: pet.age,
+                        value: pet.age.toString(),
                       ),
                     ],
                   ),

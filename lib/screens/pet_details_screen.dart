@@ -84,7 +84,7 @@ class PetDetailsScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 20),
                             Text(
-                              pet.age,
+                              pet.age.toString(),
                               style: const TextStyle(
                                 fontSize: 16,
                               ),
@@ -113,7 +113,7 @@ class PetDetailsScreen extends StatelessWidget {
                         CustomInfographic(
                           color: const Color(0xffF78F8F),
                           title: 'Yaş',
-                          value: pet.age,
+                          value: pet.age.toString(),
                         ),
                       ],
                     ),

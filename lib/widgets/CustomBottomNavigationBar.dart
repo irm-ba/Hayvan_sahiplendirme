@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pet_adoption/account.dart';
 import 'package:pet_adoption/product_add_page.dart';
 import 'package:pet_adoption/screens/home.dart';
+import 'package:pet_adoption/healtbutton.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   @override
@@ -33,6 +34,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ProductAdd()),
+          );
+        } else if (index == 3) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
           );
         } else if (index == 4) {
           Navigator.push(

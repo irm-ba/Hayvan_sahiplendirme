@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductAdd extends StatefulWidget {
   const ProductAdd({Key? key}) : super(key: key);
@@ -14,11 +14,11 @@ class _ProductAddState extends State<ProductAdd> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController breedController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
-  final TextEditingController hayvanTuruController = TextEditingController();
-  final TextEditingController hayvanAciklamasiController =
-      TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
   final TextEditingController healthStatusController = TextEditingController();
+  final TextEditingController animalTypeController = TextEditingController();
 
+  String? selectedLocation;
   bool isGenderMale = true;
   List<File> _images = [];
   File? _healthCardImage;
@@ -32,7 +32,7 @@ class _ProductAddState extends State<ProductAdd> {
       if (pickedFile != null) {
         _images.add(File(pickedFile.path));
       } else {
-        print('Resim Seçilmedi');
+        print('Resim seçilmedi');
       }
     });
   }
@@ -61,7 +61,10 @@ class _ProductAddState extends State<ProductAdd> {
         ageController.text.isEmpty ||
         _images.isEmpty ||
         healthStatusController.text.isEmpty ||
-        _healthCardImage == null) {
+        _healthCardImage == null ||
+        selectedLocation == null ||
+        animalTypeController.text.isEmpty ||
+        descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lütfen tüm alanları doldurun ve resim ekleyin.'),
@@ -74,55 +77,135 @@ class _ProductAddState extends State<ProductAdd> {
       name: nameController.text,
       breed: breedController.text,
       isGenderMale: isGenderMale,
-      age: ageController.text,
-      imageUrl: _images[0]
-          .path, // Sadece ilk resmi kullanıyorsunuz, diğerleri de eklemek isterseniz uygun yerde güncellemelisiniz.
+      age: int.parse(ageController.text),
+      imageUrl: _images.isNotEmpty ? _images[0].path : '',
       healthStatus: healthStatusController.text,
-      healthCardImageUrl: _healthCardImage!.path,
+      healthCardImageUrl:
+          _healthCardImage != null ? _healthCardImage!.path : '',
+      description: descriptionController.text,
+      personalityTraits: 'Kişilik özellikleri eksik',
+      animalType: animalTypeController.text,
+      location: selectedLocation!,
     );
 
-    try {
-      // Firestore'a yeni pet verisini ekle
-      await FirebaseFirestore.instance.collection('pets').add({
-        'name': newPet.name,
-        'breed': newPet.breed,
-        'isGenderMale': newPet.isGenderMale,
-        'age': newPet.age,
-        'imageUrl': newPet.imageUrl,
-        'healthStatus': newPet.healthStatus,
-        'healthCardImageUrl': newPet.healthCardImageUrl,
-      });
+    // Firestore koleksiyonuna veri ekleme
+    final firestore = FirebaseFirestore.instance;
+    await firestore.collection('pet').add({
+      'name': newPet.name,
+      'breed': newPet.breed,
+      'isGenderMale': newPet.isGenderMale,
+      'age': newPet.age,
+      'imageUrl': newPet.imageUrl,
+      'healthStatus': newPet.healthStatus,
+      'healthCardImageUrl': newPet.healthCardImageUrl,
+      'description': newPet.description,
+      'personalityTraits': newPet.personalityTraits,
+      'animalType': newPet.animalType,
+      'location': newPet.location,
+    });
 
-      // Veri eklendikten sonra geri bildirim veya navigasyon yapabilirsiniz
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Hayvan başarıyla eklendi!'),
-        ),
-      );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Hayvan başarıyla eklendi!'),
+      ),
+    );
 
-      // Formu sıfırlamak için gerekli kontrolleri ekleyebilirsiniz (isteğe bağlı)
-      nameController.clear();
-      breedController.clear();
-      ageController.clear();
-      hayvanTuruController.clear();
-      hayvanAciklamasiController.clear();
-      healthStatusController.clear();
-      setState(() {
-        _images.clear();
-        _healthCardImage = null;
-      });
-    } catch (e) {
-      print('Firebase veri eklerken hata oluştu: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Hayvan eklenirken bir hata oluştu.'),
-        ),
-      );
-    }
+    // Formu sıfırlamak için
+    nameController.clear();
+    breedController.clear();
+    ageController.clear();
+    descriptionController.clear();
+    healthStatusController.clear();
+    animalTypeController.clear();
+    setState(() {
+      _images.clear();
+      _healthCardImage = null;
+      selectedLocation = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    List<String> cities = [
+      'Adana',
+      'Adıyaman',
+      'Afyonkarahisar',
+      'Ağrı',
+      'Aksaray',
+      'Amasya',
+      'Ankara',
+      'Antalya',
+      'Artvin',
+      'Aydın',
+      'Balıkesir',
+      'Bilecik',
+      'Bingöl',
+      'Bitlis',
+      'Bolu',
+      'Burdur',
+      'Bursa',
+      'Çanakkale',
+      'Çankırı',
+      'Çorum',
+      'Denizli',
+      'Diyarbakır',
+      'Düzce',
+      'Edirne',
+      'Elazığ',
+      'Erzincan',
+      'Erzurum',
+      'Eskişehir',
+      'Gaziantep',
+      'Giresun',
+      'Gümüşhane',
+      'Hakkari',
+      'Hatay',
+      'Iğdır',
+      'Isparta',
+      'İstanbul',
+      'İzmir',
+      'Kahramanmaraş',
+      'Karabük',
+      'Karaman',
+      'Kars',
+      'Kastamonu',
+      'Kayseri',
+      'Kırıkkale',
+      'Kırklareli',
+      'Kırşehir',
+      'Kilis',
+      'Kocaeli',
+      'Konya',
+      'Kütahya',
+      'Malatya',
+      'Manisa',
+      'Mardin',
+      'Mersin',
+      'Muğla',
+      'Muş',
+      'Nevşehir',
+      'Niğde',
+      'Ordu',
+      'Osmaniye',
+      'Rize',
+      'Sakarya',
+      'Samsun',
+      'Siirt',
+      'Sinop',
+      'Sivas',
+      'Şanlıurfa',
+      'Şırnak',
+      'Tekirdağ',
+      'Tokat',
+      'Trabzon',
+      'Tunceli',
+      'Uşak',
+      'Van',
+      'Yalova',
+      'Yozgat',
+      'Zonguldak'
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Hayvan Ekle"),
@@ -223,7 +306,7 @@ class _ProductAddState extends State<ProductAdd> {
               ),
               SizedBox(height: 10),
               TextField(
-                controller: hayvanTuruController,
+                controller: animalTypeController,
                 decoration: InputDecoration(
                   hintText: "Hayvanın Türü",
                   border: OutlineInputBorder(
@@ -254,6 +337,7 @@ class _ProductAddState extends State<ProductAdd> {
               SizedBox(height: 10),
               TextField(
                 controller: ageController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: "Yaş",
                   border: OutlineInputBorder(
@@ -268,9 +352,9 @@ class _ProductAddState extends State<ProductAdd> {
               ),
               SizedBox(height: 10),
               TextField(
-                controller: hayvanAciklamasiController,
+                controller: descriptionController,
                 decoration: InputDecoration(
-                  hintText: "Açıklama",
+                  hintText: "Hayvanın Açıklaması",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -292,6 +376,11 @@ class _ProductAddState extends State<ProductAdd> {
                 ),
               ),
               SizedBox(height: 20),
+              Text(
+                "Sağlık Kartı",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              SizedBox(height: 10),
               GestureDetector(
                 onTap: _getHealthCardImage,
                 child: Container(
@@ -308,50 +397,41 @@ class _ProductAddState extends State<ProductAdd> {
                             children: [
                               Icon(Icons.add_photo_alternate,
                                   size: 50, color: Colors.grey),
-                              Text('Sağlık Karnesi Resmi Seç'),
+                              Text('Sağlık Kartı Ekle'),
                             ],
                           ),
                         )
-                      : Stack(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(8),
-                              width: double.infinity,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: FileImage(_healthCardImage!),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 10,
-                              right: 10,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _healthCardImage = null;
-                                  });
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.black.withOpacity(0.6),
-                                  ),
-                                  child: Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                      : Image.file(
+                          _healthCardImage!,
+                          fit: BoxFit.cover,
                         ),
                 ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Lokasyon",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                value: selectedLocation,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedLocation = newValue;
+                  });
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                items: cities.map((String city) {
+                  return DropdownMenuItem<String>(
+                    value: city,
+                    child: Text(city),
+                  );
+                }).toList(),
+                hint: Text("Bir şehir seçin"),
               ),
               SizedBox(height: 20),
               Text(
@@ -376,7 +456,7 @@ class _ProductAddState extends State<ProductAdd> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text("Ekle"),
+                child: Text("Gönder"),
               ),
             ],
           ),
@@ -390,10 +470,14 @@ class PetData {
   final String name;
   final String breed;
   final bool isGenderMale;
-  final String age;
+  final int age;
   final String imageUrl;
   final String healthStatus;
   final String healthCardImageUrl;
+  final String description;
+  final String personalityTraits;
+  final String animalType;
+  final String location;
 
   PetData({
     required this.name,
@@ -403,5 +487,9 @@ class PetData {
     required this.imageUrl,
     required this.healthStatus,
     required this.healthCardImageUrl,
+    required this.description,
+    required this.personalityTraits,
+    required this.animalType,
+    required this.location,
   });
 }

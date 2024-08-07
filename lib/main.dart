@@ -10,12 +10,13 @@ import 'package:pet_adoption/screens/home.dart';
 import 'package:pet_adoption/sign_up.dart';
 import 'package:pet_adoption/widgets/healtbutton.dart';
 import 'firebase/auth.dart';
-import '';
 import 'package:pet_adoption/widgets/HealthRecordAdd.dart';
+import 'package:flutter/services.dart'; // Import SystemChrome
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   runApp(MyApp());
 }
 
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: SignupPage(),
+      home: Home(),
     );
   }
 }

@@ -8,27 +8,6 @@ class PetGridList extends StatelessWidget {
 
   const PetGridList({Key? key, required this.pets}) : super(key: key);
 
-  void _onItemTapped(BuildContext context, int index) {
-    // Alt menü öğelerine tıklama işlemleri
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, 'PetGridList');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/search');
-        break;
-      case 2:
-        Navigator.pushNamed(context, ' /ProductAdd');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/hospital');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/profile');
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +100,7 @@ class PetGridList extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        pet.age,
+                        '${pet.age} yaşında',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,

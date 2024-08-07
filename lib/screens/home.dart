@@ -55,7 +55,7 @@ class Home extends StatelessWidget {
               leading: Icon(Icons.announcement_outlined),
               title: Text('Bize Ulaşın'),
               onTap: () {
-                // Replace SettingsPage() with appropriate page
+                // Replace with the appropriate page
               },
             ),
             ListTile(
@@ -68,7 +68,6 @@ class Home extends StatelessWidget {
                 );
               },
             ),
-            // Add more menu items here if needed
           ],
         ),
       ),
@@ -127,7 +126,7 @@ class Home extends StatelessWidget {
           /// Pet List
           Expanded(
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('pets').snapshots(),
+              stream: FirebaseFirestore.instance.collection('pet').snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -142,19 +141,7 @@ class Home extends StatelessWidget {
                 // Firestore'dan gelen verileri PetData listesine dönüştürme
                 List<PetData> pets =
                     snapshot.data!.docs.map((DocumentSnapshot doc) {
-                  Map<String, dynamic> data =
-                      doc.data() as Map<String, dynamic>;
-                  return PetData(
-                    name: data['name'],
-                    breed: data['breed'],
-                    isGenderMale: data['isGenderMale'],
-                    age: data['age'],
-                    imageUrl: data['imageUrl'],
-                    healthStatus:
-                        data['healthStatus'], // Add healthStatus if required
-                    healthCardImageUrl: data[
-                        'healthCardImageUrl'], // Add healthCardImageUrl if required
-                  );
+                  return PetData.fromSnapshot(doc);
                 }).toList();
 
                 return PetGridList(

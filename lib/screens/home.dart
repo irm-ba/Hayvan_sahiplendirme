@@ -20,142 +20,139 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.only(top: 30),
-    child:Scaffold(
-      bottomNavigationBar: CustomBottomNavigationBar(),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: kBrownColor,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+    return Padding(
+        padding: EdgeInsets.only(top: 30),
+        child: Scaffold(
+          bottomNavigationBar: CustomBottomNavigationBar(),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: kBrownColor,
+                  ),
+                  child: Text(
+                    'Menu',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profil'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AccountPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Ayarlar'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.announcement_outlined),
-              title: Text('Bize Ulaşın'),
-              onTap: () {
-                // Replace with the appropriate page
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.accessibility_new_sharp),
-              title: Text('Hakkımızda'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AboutUsPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 20,
-                child: IconButton(
-                  icon: Icon(Icons.menu_rounded, color: kBrownColor),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
+                ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text('Profil'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AccountPage()),
+                    );
                   },
                 ),
-              ),
-            );
-          },
-        ),
-        title: const Text('Felvera'),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(kDummyProfilePicUrl),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          /// Categories
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-
-                _buildCategoryButton('Kedi İlanları'),
-                _buildCategoryButton('Kayıp İlanları'),
-                _buildCategoryButton('Tüm İlanlar'),
-                _buildCategoryButton('Köpek İlanları'),
-
+                ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text('Ayarlar'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.announcement_outlined),
+                  title: Text('Bize Ulaşın'),
+                  onTap: () {
+                    // Replace with the appropriate page
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.accessibility_new_sharp),
+                  title: Text('Hakkımızda'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AboutUsPage()),
+                    );
+                  },
+                ),
               ],
             ),
           ),
-          const SizedBox(height: 24),
-
-          /// Pet List
-          Expanded(
-            child: StreamBuilder(
-              stream: _getCategoryStream(selectedCategory),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Center(child: Text('Hata oluştu: ${snapshot.error}'));
-                }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('Hiç hayvan bulunamadı.'));
-                }
-
-                // Firestore'dan gelen verileri PetData listesine dönüştürme
-                List<PetData> pets =
-                snapshot.data!.docs.map((DocumentSnapshot doc) {
-                  return PetData.fromSnapshot(doc);
-                }).toList();
-
-                return PetGridList(pets: pets);
+          appBar: AppBar(
+            leading: Builder(
+              builder: (BuildContext context) {
+                return Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 20,
+                    child: IconButton(
+                      icon: Icon(Icons.menu_rounded, color: kBrownColor),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    ),
+                  ),
+                );
               },
             ),
+            title: const Text('Felvera'),
+            actions: const [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(kDummyProfilePicUrl),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    )
-    );
+          body: Column(
+            children: [
+              /// Categories
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildCategoryButton('Tüm İlanlar'),
+                    _buildCategoryButton('Kedi İlanları'),
+                    _buildCategoryButton('Kayıp İlanları'),
+                    _buildCategoryButton('Köpek İlanları'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
 
+              /// Pet List
+              Expanded(
+                child: StreamBuilder(
+                  stream: _getCategoryStream(selectedCategory),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text('Hata oluştu: ${snapshot.error}'));
+                    }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(child: Text('Hiç hayvan bulunamadı.'));
+                    }
 
+                    // Firestore'dan gelen verileri PetData listesine dönüştürme
+                    List<PetData> pets =
+                        snapshot.data!.docs.map((DocumentSnapshot doc) {
+                      return PetData.fromSnapshot(doc);
+                    }).toList();
+
+                    return PetGridList(pets: pets);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget _buildCategoryButton(String category) {
@@ -199,6 +196,5 @@ class _HomeState extends State<Home> {
     } else {
       return FirebaseFirestore.instance.collection('pet').snapshots();
     }
-
   }
 }

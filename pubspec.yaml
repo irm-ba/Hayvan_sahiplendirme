@@ -5,20 +5,23 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=3.3.0-279.3.beta <4.0.0'
-  
+
 dependencies:
   flutter:
     sdk: flutter
-  firebase_auth: ^5.1.2  # Update to the latest compatible version
-  cloud_firestore: ^5.1.0  # Update to the latest compatible version
-  firebase_core: ^3.2.0  # Update to the latest compatible version
-  firebase_storage: ^12.1.1  # Update to the latest compatible version
-  introduction_screen: ^3.1.14  # Update to the latest compatible version
-  image_picker: ^1.1.2  # Update to the latest compatible version
+  firebase_auth: ^5.1.2
+  cloud_firestore: ^5.1.0
+  firebase_core: ^3.2.0
+  firebase_storage: ^12.1.1
+  introduction_screen: ^3.1.14
+  image_picker: ^1.1.2
   cupertino_icons: ^1.0.6
   flutter_svg: ^2.0.9
   carousel_slider: ^4.0.0
-  intl: ^0.19.0  # Update to the latest compatible version
+  intl: ^0.19.0
+  googleapis: ^13.2.0
+  googleapis_auth: ^1.6.0
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:

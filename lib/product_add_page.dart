@@ -8,7 +8,8 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
+class _MainScreenState extends State<MainScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -124,7 +125,8 @@ class _ProductAddState extends State<ProductAdd> {
       age: int.parse(ageController.text),
       imageUrl: _images.isNotEmpty ? _images[0].path : '',
       healthStatus: healthStatusController.text,
-      healthCardImageUrl: _healthCardImage != null ? _healthCardImage!.path : '',
+      healthCardImageUrl:
+          _healthCardImage != null ? _healthCardImage!.path : '',
       description: descriptionController.text,
       personalityTraits: 'Kişilik özellikleri eksik',
       animalType: animalTypeController.text,
@@ -272,46 +274,46 @@ class _ProductAddState extends State<ProductAdd> {
                   height: 200,
                   child: _images.isEmpty
                       ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add_photo_alternate,
-                            size: 50, color: Colors.grey),
-                        Text('Resim Seç'),
-                      ],
-                    ),
-                  )
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_photo_alternate,
+                                  size: 50, color: Colors.grey),
+                              Text('Resim Seç'),
+                            ],
+                          ),
+                        )
                       : ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _images.length,
-                    itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(8),
-                            width: 150,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: FileImage(_images[index]),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: IconButton(
-                              icon: Icon(Icons.remove_circle,
-                                  color: Colors.red),
-                              onPressed: () => _removeImage(index),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _images.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(8),
+                                  width: 150,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: FileImage(_images[index]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: Icon(Icons.remove_circle,
+                                        color: Colors.red),
+                                    onPressed: () => _removeImage(index),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -331,15 +333,15 @@ class _ProductAddState extends State<ProductAdd> {
                   ),
                   child: _healthCardImage == null
                       ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add_photo_alternate,
-                            size: 50, color: Colors.grey),
-                        Text('Sağlık Kartı Resmi Seç'),
-                      ],
-                    ),
-                  )
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_photo_alternate,
+                                  size: 50, color: Colors.grey),
+                              Text('Sağlık Kartı Resmi Seç'),
+                            ],
+                          ),
+                        )
                       : Image.file(_healthCardImage!, fit: BoxFit.cover),
                 ),
               ),
@@ -351,7 +353,7 @@ class _ProductAddState extends State<ProductAdd> {
               const SizedBox(height: 10),
               TextField(
                 controller: breedController,
-                decoration: InputDecoration(labelText: 'Tür'),
+                decoration: InputDecoration(labelText: 'Irk'),
               ),
               const SizedBox(height: 10),
               TextField(
@@ -666,46 +668,46 @@ class _LostAnimalAddState extends State<LostAnimalAdd> {
                   height: 200,
                   child: _images.isEmpty
                       ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add_photo_alternate,
-                            size: 50, color: Colors.grey),
-                        Text('Resim Seç'),
-                      ],
-                    ),
-                  )
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add_photo_alternate,
+                                  size: 50, color: Colors.grey),
+                              Text('Resim Seç'),
+                            ],
+                          ),
+                        )
                       : ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _images.length,
-                    itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(8),
-                            width: 150,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: FileImage(_images[index]),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: IconButton(
-                              icon: Icon(Icons.remove_circle,
-                                  color: Colors.red),
-                              onPressed: () => _removeImage(index),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _images.length,
+                          itemBuilder: (context, index) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(8),
+                                  width: 150,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: FileImage(_images[index]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    icon: Icon(Icons.remove_circle,
+                                        color: Colors.red),
+                                    onPressed: () => _removeImage(index),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -716,7 +718,7 @@ class _LostAnimalAddState extends State<LostAnimalAdd> {
               const SizedBox(height: 10),
               TextField(
                 controller: breedController,
-                decoration: InputDecoration(labelText: 'Tür'),
+                decoration: InputDecoration(labelText: 'Irk'),
               ),
               const SizedBox(height: 10),
               const Text("Cinsiyet"),

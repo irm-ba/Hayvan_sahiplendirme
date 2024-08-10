@@ -1,5 +1,6 @@
 // custom_bottom_navigation_bar.dart
 import 'package:flutter/material.dart';
+import 'package:pet_adoption/AdoptionApplicationsPage.dart';
 import 'package:pet_adoption/account.dart';
 import 'package:pet_adoption/product_add_page.dart';
 import 'package:pet_adoption/screens/home.dart';
@@ -14,6 +15,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       Icons.add,
       Icons.notifications,
       Icons.person_outline,
+      Icons.list
     ];
 
     return BottomNavigationBar(
@@ -44,6 +46,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AccountPage()),
+          );
+        } else if (index == 5) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AdoptionApplicationsPage()),
           );
         }
       },

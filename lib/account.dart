@@ -131,6 +131,7 @@ class _AccountPageState extends State<AccountPage> {
       Icons.add,
       Icons.notifications,
       Icons.person_outline,
+      Icons.list
     ];
 
     return BottomNavigationBar(

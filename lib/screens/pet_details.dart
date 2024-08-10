@@ -14,7 +14,7 @@ class PetDetailsScreen extends StatelessWidget {
         title: Text(
           pet.name,
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.purple[800],
           ),
@@ -32,14 +32,40 @@ class PetDetailsScreen extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 450,
+              height: 500,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(pet.imageUrl),
                   fit: BoxFit.cover,
                 ),
                 borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(20)),
+                    BorderRadius.vertical(bottom: Radius.circular(30)),
+              ),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.5),
+                        Colors.transparent
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(30)),
+                  ),
+                  child: Text(
+                    pet.name,
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
             ),
             Padding(
@@ -47,33 +73,6 @@ class PetDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    pet.name,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple[800],
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(
-                        pet.isGenderMale ? Icons.male : Icons.female,
-                        color: Colors.purple[700],
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        pet.breed,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey[600],
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
                   buildInfoCard(
                     title: 'Yaş',
                     content: '${pet.age} yaşında',
@@ -108,10 +107,11 @@ class PetDetailsScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 24),
                         Text(
                           'Sağlık Kartı:',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                             color: Colors.purple[800],
                           ),
@@ -129,10 +129,11 @@ class PetDetailsScreen extends StatelessWidget {
                             );
                           },
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                             child: Image.network(
                               pet.healthCardImageUrl,
                               height: 200,
+                              width: double.infinity,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -146,7 +147,7 @@ class PetDetailsScreen extends StatelessWidget {
                         'Sağlık kartı bulunmuyor.',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Color.fromARGB(255, 120, 33, 109),
+                          color: Colors.purple[700],
                         ),
                       ),
                     ),
@@ -164,8 +165,7 @@ class PetDetailsScreen extends StatelessWidget {
                       icon: Icon(Icons.favorite, color: Colors.white),
                       label: Text('Sahiplen'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Color.fromARGB(255, 80, 40, 85), // Buton rengi
+                        backgroundColor: Colors.purple[700], // Buton rengi
                         foregroundColor:
                             Colors.white, // Buton üzerindeki yazı rengi
                         padding:
@@ -195,28 +195,31 @@ class PetDetailsScreen extends StatelessWidget {
     required IconData icon,
     required Color? iconColor,
   }) {
-    return Card(
-      elevation: 2,
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: iconColor!.withOpacity(0.1),
-          child: Icon(icon, color: iconColor),
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.purple[800],
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: ListTile(
+          contentPadding: EdgeInsets.all(16),
+          leading: CircleAvatar(
+            backgroundColor: iconColor!.withOpacity(0.2),
+            child: Icon(icon, color: iconColor),
           ),
-        ),
-        subtitle: Text(
-          content,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey[800],
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.purple[800],
+            ),
+          ),
+          subtitle: Text(
+            content,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[800],
+            ),
           ),
         ),
       ),
@@ -233,13 +236,18 @@ class FullScreenImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        title: Text('Sağlık Kartı'),
+        backgroundColor: Colors.transparent,
+        title:
+            Text('Sağlık Kartı', style: TextStyle(color: Colors.purple[800])),
         centerTitle: true,
+        elevation: 0,
       ),
       body: Center(
         child: InteractiveViewer(
-          child: Image.network(imageUrl),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.network(imageUrl),
+          ),
         ),
       ),
     );

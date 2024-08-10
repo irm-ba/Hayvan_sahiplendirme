@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adoption/constants.dart';
-import 'package:pet_adoption/widgets/custom_infographic.dart'; // Ensure CustomInfographic is correctly imported
 import 'package:pet_adoption/models/pet_data.dart';
 
 class PetDetailsScreen extends StatelessWidget {
@@ -11,138 +9,206 @@ class PetDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPinkishColor,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            forceMaterialTransparency: true,
-            expandedHeight: 400,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                pet.imageUrl,
-                fit: BoxFit.cover,
+      appBar: AppBar(
+        title: Text(
+          pet.name,
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.purple[800],
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.purple[800]),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              height: 450,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(pet.imageUrl),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(20)),
               ),
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.favorite_border,
-                  color: kPrimaryColor,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              color: kBackgroundColor,
+            Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 16),
-                  Container(
-                    height: 5,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: kGreyTextColor.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(2.5),
-                    ),
-                  ),
-                  SizedBox(height: 16),
                   Text(
                     pet.name,
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    pet.breed,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: kPrimaryColor,
+                      color: Colors.purple[800],
                     ),
                   ),
                   SizedBox(height: 8),
                   Row(
                     children: [
-                      Text(
-                        pet.isGenderMale ? 'Erkek' : 'Dişi',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
+                      Icon(
+                        pet.isGenderMale ? Icons.male : Icons.female,
+                        color: Colors.purple[700],
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(width: 8),
                       Text(
-                        '${pet.age} yaşında',
+                        pet.breed,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 20,
+                          color: Colors.grey[600],
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
                     ],
                   ),
-                  Divider(
-                    thickness: 1,
-                    height: 20,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomInfographic(
-                        color: kPrimaryColor,
-                        title: 'Cinsiyet',
-                        value: pet.isGenderMale ? 'Erkek' : 'Dişi',
-                      ),
-                      CustomInfographic(
-                        color: const Color(0xffF78F8F),
-                        title: 'Yaş',
-                        value: pet.age.toString(),
-                      ),
-                    ],
-                  ),
                   SizedBox(height: 16),
-                  Divider(
-                    thickness: 1,
-                    height: 20,
-                    indent: 0,
-                    endIndent: 0,
+                  buildInfoCard(
+                    title: 'Yaş',
+                    content: '${pet.age} yaşında',
+                    icon: Icons.cake,
+                    iconColor: Colors.purple[300],
                   ),
-                  SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      kDummyDescription,
-                      style: TextStyle(
-                        color: kGreyTextColor,
+                  buildInfoCard(
+                    title: 'Sağlık Durumu',
+                    content: pet.healthStatus,
+                    icon: Icons.local_hospital,
+                    iconColor: Colors.red[300],
+                  ),
+                  buildInfoCard(
+                    title: 'Hayvan Türü',
+                    content: pet.animalType,
+                    icon: Icons.pets,
+                    iconColor: Colors.orange[300],
+                  ),
+                  buildInfoCard(
+                    title: 'Lokasyon',
+                    content: pet.location,
+                    icon: Icons.location_on,
+                    iconColor: Colors.blue[300],
+                  ),
+                  buildInfoCard(
+                    title: 'Açıklama',
+                    content: pet.description,
+                    icon: Icons.description,
+                    iconColor: Colors.green[300],
+                  ),
+                  if (pet.healthCardImageUrl.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Sağlık Kartı:',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.purple[800],
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FullScreenImage(
+                                  imageUrl: pet.healthCardImageUrl,
+                                ),
+                              ),
+                            );
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              pet.healthCardImageUrl,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        'Sağlık kartı bulunmuyor.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 120, 33, 109),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.all(16),
-        height: 48,
-        decoration: BoxDecoration(
-          gradient: kLinearGradient,
-          borderRadius: BorderRadius.circular(24),
+          ],
         ),
-        child: Center(
-          child: Text(
-            'Sahiplen',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+      ),
+    );
+  }
+
+  Widget buildInfoCard({
+    required String title,
+    required String content,
+    required IconData icon,
+    required Color? iconColor,
+  }) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: iconColor!.withOpacity(0.1),
+          child: Icon(icon, color: iconColor),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.purple[800],
           ),
+        ),
+        subtitle: Text(
+          content,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[800],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FullScreenImage extends StatelessWidget {
+  final String imageUrl;
+
+  FullScreenImage({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        title: Text('Sağlık Kartı'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: InteractiveViewer(
+          child: Image.network(imageUrl),
         ),
       ),
     );

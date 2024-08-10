@@ -106,13 +106,13 @@ class _ProductAddState extends State<ProductAdd> {
         ageController.text.isEmpty ||
         _images.isEmpty ||
         healthStatusController.text.isEmpty ||
-        _healthCardImage == null ||
         selectedLocation == null ||
         animalTypeController.text.isEmpty ||
         descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Lütfen tüm alanları doldurun ve resim ekleyin.'),
+          content:
+              Text('Lütfen tüm zorunlu alanları doldurun ve resim ekleyin.'),
         ),
       );
       return;

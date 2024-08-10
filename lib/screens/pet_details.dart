@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adoption/models/pet_data.dart';
+import '../AdoptionApplicationForm.dart'; // Başvuru formunu içe aktarın
 
 class PetDetailsScreen extends StatelessWidget {
   final PetData pet;
@@ -149,6 +150,36 @@ class PetDetailsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                  SizedBox(height: 24),
+                  Center(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AdoptionApplicationForm(),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.favorite, color: Colors.white),
+                      label: Text('Sahiplen'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Color.fromARGB(255, 80, 40, 85), // Buton rengi
+                        foregroundColor:
+                            Colors.white, // Buton üzerindeki yazı rengi
+                        padding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 120),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        textStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

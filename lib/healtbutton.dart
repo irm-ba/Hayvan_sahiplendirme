@@ -19,6 +19,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: Colors.grey[800]),
+          bodyMedium: TextStyle(color: Colors.grey[600]),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.purple,
+            foregroundColor: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30), // Yuvarlatılmış köşeler
+            ),
+            elevation: 5, // Hafif gölge
+          ),
+        ),
+        cardTheme: CardTheme(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        appBarTheme: AppBarTheme(
+          color: Colors.white,
+          iconTheme: IconThemeData(color: Colors.purple),
+          titleTextStyle: TextStyle(
+            color: Colors.purple,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          elevation: 0,
+        ),
+      ),
       home: HomePage(),
     );
   }
@@ -33,42 +68,84 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Ana Sayfa'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
           children: [
-            ElevatedButton(
-              onPressed: () {
+            _buildCategoryCard(
+              context,
+              title: 'Sağlık Kaydı',
+              icon: Icons.medical_services,
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => HealthRecordHomePage()),
                 );
               },
-              child: const Text('Sağlık Kaydı'),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
+            _buildCategoryCard(
+              context,
+              title: 'Aşı Takvimi',
+              icon: Icons.calendar_today,
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => VaccinationScheduleHomePage()),
                 );
               },
-              child: const Text('Aşı Takvimi'),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
+            _buildCategoryCard(
+              context,
+              title: 'Veteriner Ziyareti',
+              icon: Icons.pets,
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => VetVisitHomePage()),
                 );
               },
-              child: const Text('Veteriner Ziyareti'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryCard(BuildContext context,
+      {required String title,
+      required IconData icon,
+      required VoidCallback onTap}) {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 50, color: Colors.purple),
+              SizedBox(height: 16),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -84,11 +161,14 @@ class HealthRecordHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Sağlık Kaydı'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
+            _buildActionButton(
+              context,
+              title: 'Sağlık Kaydı Ekle',
+              icon: Icons.add,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -97,10 +177,12 @@ class HealthRecordHomePage extends StatelessWidget {
                           petId: 'PET_ID')), // Geçerli bir pet ID'si ekleyin
                 );
               },
-              child: const Text('Sağlık Kaydı Ekle'),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            _buildActionButton(
+              context,
+              title: 'Sağlık Kayıtlarını Görüntüle',
+              icon: Icons.visibility,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -108,9 +190,32 @@ class HealthRecordHomePage extends StatelessWidget {
                       builder: (context) => const HealthRecordList()),
                 );
               },
-              child: const Text('Sağlık Kayıtlarını Görüntüle'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(BuildContext context,
+      {required String title,
+      required IconData icon,
+      required VoidCallback onPressed}) {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon, size: 20),
+        label: Text(title),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.purple,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 16),
+          elevation: 5,
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -126,11 +231,14 @@ class VaccinationScheduleHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Aşı Takvimi'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
+            _buildActionButton(
+              context,
+              title: 'Aşı Takvimi Ekle',
+              icon: Icons.add,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -138,10 +246,12 @@ class VaccinationScheduleHomePage extends StatelessWidget {
                       builder: (context) => const VaccinationScheduleAdd()),
                 );
               },
-              child: const Text('Aşı Takvimi Ekle'),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            _buildActionButton(
+              context,
+              title: 'Aşı Takvimlerini Görüntüle',
+              icon: Icons.visibility,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -149,9 +259,32 @@ class VaccinationScheduleHomePage extends StatelessWidget {
                       builder: (context) => const VaccinationScheduleList()),
                 );
               },
-              child: const Text('Aşı Takvimlerini Görüntüle'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(BuildContext context,
+      {required String title,
+      required IconData icon,
+      required VoidCallback onPressed}) {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon, size: 20),
+        label: Text(title),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.purple,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 16),
+          elevation: 5,
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -167,30 +300,58 @@ class VetVisitHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Veteriner Ziyareti'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
+            _buildActionButton(
+              context,
+              title: 'Veteriner Ziyareti Ekle',
+              icon: Icons.add,
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const VetVisitAdd()),
                 );
               },
-              child: const Text('Veteriner Ziyareti Ekle'),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            _buildActionButton(
+              context,
+              title: 'Veteriner Ziyaretlerini Görüntüle',
+              icon: Icons.visibility,
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const VetVisitList()),
                 );
               },
-              child: const Text('Veteriner Ziyaretlerini Görüntüle'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(BuildContext context,
+      {required String title,
+      required IconData icon,
+      required VoidCallback onPressed}) {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon, size: 20),
+        label: Text(title),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.purple,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 16),
+          elevation: 5,
+          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );
